@@ -1,4 +1,5 @@
-import java.util.Arrays;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
 
 public class App {
@@ -36,23 +37,67 @@ public class App {
         return vetor;
     }
 
+    static String gerarCabecalho() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("+--------------------+--------------------+--------------------+--------------------+--------------------+\n");
+        sb.append("| Método             | Tamanho do Vetor   | Comparações        | Movimentações      | Tempo (ms)         |\n");
+        sb.append("+--------------------+--------------------+--------------------+--------------------+--------------------+\n");
+
+        return sb.toString();
+
+    }
+
+    static String gerarLinha(String algoritmo, int tamanhoVetor, long numComparacoes, long numMovimentacoes, double tempo) {
+
+        StringBuilder sb = new StringBuilder();
+        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("pt", "BR")); 
+
+        sb.append(String.format("| %-18s | %18s | %18s | %18s | %18s |\n", algoritmo, nf.format(tamanhoVetor), nf.format(numComparacoes), nf.format(numMovimentacoes), nf.format(tempo)));
+        sb.append("+--------------------+--------------------+--------------------+--------------------+--------------------+\n");
+
+        return sb.toString();
+
+    }
+
+    static String visualizarVetor(Integer[] vetor) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < vetor.length; i++) {
+            sb.append(vetor[i]);
+            if (i < vetor.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 
     public static void main(String[] args) {
-        int tam = 20;
+
+        System.out.print(gerarCabecalho());
+
+        int tam = 50000;
         Integer[] vetor = gerarVetorObjetos(tam);
 
         BubbleSort<Integer> bolha = new BubbleSort<>();
 
         Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
 
-        System.out.println("\nVetor ordenado método Bolha:");
-        System.out.println("Comparações: " + bolha.getComparacoes());
-        System.out.println("Movimentações: " + bolha.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + bolha.getTempoOrdenacao());
+        System.out.print(gerarLinha("Bubble Sort", tam, bolha.getComparacoes(), bolha.getMovimentacoes(), bolha.getTempoOrdenacao()));
+    
+        InsertionSort<Integer> insercao = new InsertionSort<>();
+    
+        Integer[] vetorOrdenadoInsercao = insercao.ordenar(vetor);
+    
+        System.out.print(gerarLinha("Insertion Sort", tam, insercao.getComparacoes(), insercao.getMovimentacoes(), insercao.getTempoOrdenacao()));
+    
+        SelectionSort<Integer> selecao = new SelectionSort<>();
+    
+        Integer[] vetorOrdenadoSelecao = selecao.ordenar(vetor);
+    
+        System.out.print(gerarLinha("Selection Sort", tam, selecao.getComparacoes(), selecao.getMovimentacoes(), selecao.getTempoOrdenacao()));
 
-        /* TO DO
-        *Fazer a implementacao do restante do main para a ordenacao 
-        *  com os algoritmos InsertionSort e SelectionSort
-        */
     }
 }
