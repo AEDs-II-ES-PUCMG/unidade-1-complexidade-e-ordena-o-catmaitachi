@@ -78,26 +78,30 @@ public class App {
 
         System.out.print(gerarCabecalho());
 
-        int tam = 50000;
-        Integer[] vetor = gerarVetorObjetos(tam);
+        for ( int i = 0; i < tamanhosTestePequeno.length; i ++ ) {
 
-        BubbleSort<Integer> bolha = new BubbleSort<>();
+            int tam = tamanhosTestePequeno[i];
+            Integer[] vetor = gerarVetorObjetos(tam);
 
-        Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
+            BubbleSort<Integer> bolha = new BubbleSort<>();
 
-        System.out.print(gerarLinha("Bubble Sort", tam, bolha.getComparacoes(), bolha.getMovimentacoes(), bolha.getTempoOrdenacao()));
-    
-        InsertionSort<Integer> insercao = new InsertionSort<>();
-    
-        Integer[] vetorOrdenadoInsercao = insercao.ordenar(vetor);
-    
-        System.out.print(gerarLinha("Insertion Sort", tam, insercao.getComparacoes(), insercao.getMovimentacoes(), insercao.getTempoOrdenacao()));
-    
-        SelectionSort<Integer> selecao = new SelectionSort<>();
-    
-        Integer[] vetorOrdenadoSelecao = selecao.ordenar(vetor);
-    
-        System.out.print(gerarLinha("Selection Sort", tam, selecao.getComparacoes(), selecao.getMovimentacoes(), selecao.getTempoOrdenacao()));
+            Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
 
+            System.out.print(gerarLinha("Bubble Sort", tam, bolha.getComparacoes(), bolha.getMovimentacoes(), bolha.getTempoOrdenacao()));
+        
+            InsertionSort<Integer> insercao = new InsertionSort<>();
+        
+            Integer[] vetorOrdenadoInsercao = insercao.ordenar(vetor);
+        
+            System.out.print(gerarLinha("Insertion Sort", tam, insercao.getComparacoes(), insercao.getMovimentacoes(), insercao.getTempoOrdenacao()));
+        
+            SelectionSort<Integer> selecao = new SelectionSort<>();
+        
+            Integer[] vetorOrdenadoSelecao = selecao.ordenar(vetor);
+        
+            System.out.print(gerarLinha("Selection Sort", tam, selecao.getComparacoes(), selecao.getMovimentacoes(), selecao.getTempoOrdenacao()));
+
+        }
+        
     }
 }
