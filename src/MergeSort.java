@@ -2,12 +2,18 @@ import java.util.Arrays;
 
 public class MergeSort<T extends Comparable<T>> implements IOrdenador<T>  {
     
+    private final String nome = "Merge Sort";
     private long comparacoes;
     private long movimentacoes;
     private double tempoOrdenacao;
     private double inicio;
 
     private double nanoToMilli = 1.0/1_000_000;
+
+    @Override
+    public String getNome() {
+        return nome;
+    }
 
     @Override
     public long getComparacoes() {
