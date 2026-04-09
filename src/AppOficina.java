@@ -41,6 +41,9 @@ public class AppOficina {
     static IOrdenador<Produto> ordenador;
     static Comparator<Produto> criterio;
 
+    static Produto[] ordenadosPorDesc;
+    static Produto[] ordenadosPorIden;
+
     // #region utilidades
     static Scanner teclado;
 
@@ -54,6 +57,11 @@ public class AppOficina {
             return null;
         }
         return valor;
+    }
+
+    static String lerTexto(String mensagem) {
+        System.out.print(mensagem + ": ");
+        return teclado.nextLine();
     }
 
     static void limparTela() {
@@ -126,16 +134,77 @@ public class AppOficina {
     }
 
     static Produto localizarProduto() {
+
         cabecalho();
-        System.out.println("Localizando um produto");
-        int numero = lerNumero("Digite o identificador do produto", Integer.class);
+        
+        System.out.println("Localizando um produto, escolha um meio de busca:");
+        
+        System.out.println("1 - Por identificador");
+        System.out.println("2 - Por descrição");
+
+        int opcao = lerNumero("Escolha uma opção", Integer.class);
+        
+        int numero = 0;
+        String descricao = "";
+        Produto[] baseBusca = null;
+
+        switch (opcao) {
+
+            case 1 :
+                
+                numero = lerNumero("Digite o identificador do produto", Integer.class);
+                baseBusca = ordenadosPorIden;
+                break;
+
+            case 2 :
+
+                descricao = lerTexto("Digite a descrição do produto");
+                baseBusca = ordenadosPorDesc;
+                break;
+
+        }
+
         Produto localizado = null;
         
-        for (int i = 0; i < quantProdutos && localizado == null; i++) {
-            if (produtos[i].hashCode() == numero)
-                localizado = produtos[i];
+        int inicio = 0;
+        int fim = quantProdutos - 1;
+
+        while ( inicio <= fim ) {
+
+            int meio = inicio + ( fim - inicio ) / 2;
+
+            if ( opcao == 1 ) {
+
+                if ( baseBusca[meio].hashCode() == numero ) {
+
+                    localizado = baseBusca[meio];
+                    break;
+                
+                }
+
+                else if ( baseBusca[meio].hashCode() < numero ) inicio = meio + 1;
+                else fim = meio - 1;
+                
+            } else if ( opcao == 2 ) {
+
+                int comparacao = baseBusca[meio].getDescricao().compareToIgnoreCase(descricao);
+
+                if ( comparacao == 0 ) {
+
+                    localizado = baseBusca[meio];
+                    break;
+
+                } 
+                
+                else if ( comparacao < 0 ) inicio = meio + 1;
+                else fim = meio - 1;
+
+            }
+
         }
+        
         return localizado;
+    
     }
 
     private static void mostrarProduto(Produto produto) {
@@ -216,10 +285,14 @@ public class AppOficina {
     }
 
     public static void main(String[] args) {
+
         teclado = new Scanner(System.in);
         
         produtos = carregarProdutos(nomeArquivoDados);
         embaralharProdutos();
+
+        ordenadosPorDesc = new MergeSort<Produto>().ordenar(produtos, new ComparadorPadrao());
+        ordenadosPorIden = new MergeSort<Produto>().ordenar(produtos, new ComparadorPorCodigo());
 
         int opcao = -1;
         
@@ -235,6 +308,9 @@ public class AppOficina {
             }
             pausa();
         }while (opcao != 0);
+
         teclado.close();
-    }                        
+
+    }                       
+
 }
