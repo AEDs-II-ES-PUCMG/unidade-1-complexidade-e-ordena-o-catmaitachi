@@ -1,126 +1,91 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class MergeSort<T extends Comparable<T>> implements IOrdenador<T>  {
+public class MergeSort<T extends Comparable<T>> implements IOrdenador<T>{
     
-    private final String nome = "Merge Sort";
-    private long comparacoes;
-    private long movimentacoes;
-    private double tempoOrdenacao;
-    private double inicio;
-
-    private double nanoToMilli = 1.0/1_000_000;
-
-    @Override
-    public String getNome() {
-        return nome;
-    }
-
-    @Override
-    public long getComparacoes() {
-        return comparacoes;
-    }
-
-    @Override
-    public long getMovimentacoes() {
-        return movimentacoes;
-    }
-
-    @Override
-    public double getTempoOrdenacao() {
-        return tempoOrdenacao;
-    }
-
-    private void iniciar(){
-        this.comparacoes = 0;
-        this.movimentacoes = 0;
-        this.inicio = System.nanoTime();
-    }
-
-    private void terminar(){
-        this.tempoOrdenacao = (System.nanoTime() - this.inicio) * nanoToMilli;
-    }
-
-    @Override
-    public T[] ordenar(T[] dados) {
-
-        T[] dadosOrdenados;
-        int dir = dados.length - 1;
-        int esq = 0;
-
-        iniciar();
-
-        dadosOrdenados = mergesort(dados, esq, dir);
-
-        terminar();
-
-        return dadosOrdenados;
-
-    }
-
-    private T[] mergesort(T[] dados, int esq, int dir) {
-
-        comparacoes++;
-
-        if ( esq < dir ) {
-
-            int meio = ( esq + dir ) / 2;
-
-            T[] ladoEsq = mergesort(dados, esq, meio);
-            T[] ladoDir = mergesort(dados, meio + 1, dir);
-            T[] merged = merge(ladoEsq, ladoDir);
-
-            return merged;
-
+        private long comparacoes;
+        private long movimentacoes;
+        private LocalDateTime inicio;
+        private LocalDateTime termino;
+        private T[] dadosOrdenados;
+        private Comparator<T> comparador;
+        
+        public MergeSort() {
+            comparacoes = 0;
+            movimentacoes = 0;
+        }
+         
+        @Override
+        public T[] ordenar(T[] dados) {    
+            return ordenar(dados, T::compareTo);
         }
 
-        return Arrays.copyOfRange(dados, esq, esq + 1);
-
-    }
-
-    private T[] merge(T[] esq, T[] dir) {
-
-        T[] merged = Arrays.copyOf(esq, esq.length + dir.length);
-
-        movimentacoes += merged.length;
-
-        int i = 0, j = 0, k = 0;
-
-        while ( i < esq.length && j < dir.length ) {
-
-            comparacoes++;
-            movimentacoes++;
-
-            if ( esq[i].compareTo(dir[j]) <= 0 ) merged[k] = esq[i++];
-            else merged[k] = dir[j++];
-
-            k++;
-
+        @Override
+        public T[] ordenar(T[] dados, Comparator<T> comparador) {    
+            this.comparador = comparador;
+            int tamanho = dados.length;
+            dadosOrdenados = Arrays.copyOf(dados, tamanho);
+            inicio = LocalDateTime.now();
+            mergesort(0, tamanho-1);
+            termino = LocalDateTime.now();
+            return dadosOrdenados;
+        }
+    
+        private T[] mergesort(int ini, int fim){
+            if(ini < fim){
+                int meio = (fim+ini)/2;
+                mergesort(ini, meio );
+                mergesort(meio+1, fim);
+                dadosOrdenados = merge(ini, fim, dadosOrdenados); 
+            }
+            return dadosOrdenados;
         }
 
-        comparacoes++;
-
-        if ( i == esq.length ) {
-
-            for ( ; k < merged.length; k++ ) {
-
-                merged[k] = dir[j++];
-                movimentacoes++;
+        private T[] merge(int inicio, int fim, T[] dados){
+            T[] novo = Arrays.copyOf(dados, dados.length);
+            int meio = (inicio+fim)/2;
+            int indice1 = inicio;
+            int indice2 = meio+1;
+            int pos = inicio;
+            while(indice1 <= meio && indice2 <= fim){
+                comparacoes++;
                 
-            }
-
-        } else {
-
-            for ( ; k < merged.length; k++ ) {
-
-                merged[k] = esq[i++];
+                if(this.comparador.compare(dados[indice1],dados[indice2]) <=0)
+                    novo[pos] = dados[indice1++];
+                else
+                    novo[pos] = dados[indice2++];
+                
+                pos++;
                 movimentacoes++;
-
             }
-
+            int origem = indice1;
+            int destino = meio;
+           
+            if(indice1 > meio){
+                origem = indice2;
+                destino = fim;
+            }
+           
+            for(int i = origem; i<=destino; i++){
+                novo[pos++] = dados[i];
+                movimentacoes++;
+            }
+            return novo;
+        }        
+ 
+        public long getComparacoes() {
+            return comparacoes;
         }
-
-        return merged;
-
-    }
+        
+        public long getMovimentacoes() {
+            return movimentacoes;
+        }
+        
+        public double getTempoOrdenacao() {
+            return Duration.between(inicio, termino).toMillis();
+        }
 
 }
+
