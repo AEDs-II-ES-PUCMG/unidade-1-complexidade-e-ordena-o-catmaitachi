@@ -43,6 +43,7 @@ public class AppOficina {
 
     static Produto[] ordenadosPorDesc;
     static Produto[] ordenadosPorIden;
+    static Produto[] ordenadosPorValor;
 
     // #region utilidades
     static Scanner teclado;
@@ -299,6 +300,7 @@ public class AppOficina {
 
         ordenadosPorDesc = new MergeSort<Produto>().ordenar(produtos, new ComparadorPadrao());
         ordenadosPorIden = new MergeSort<Produto>().ordenar(produtos, new ComparadorPorCodigo());
+        ordenadosPorValor = new MergeSort<Produto>().ordenar(produtos, new ComparadorPorValor());
 
         int opcao = -1;
         
