@@ -98,6 +98,8 @@ public class AppOficina {
         System.out.println("2 - Inserção");
         System.out.println("3 - Seleção");
         System.out.println("4 - Mergesort");
+        System.out.println("5 - Heapsort");
+        System.out.println("6 - Quicksort");
         System.out.println("0 - Finalizar");
        
         return lerNumero("Digite sua opção", Integer.class);
@@ -247,6 +249,8 @@ public class AppOficina {
             case 2 -> ordenador = new InsertSort<>();
             case 3 -> ordenador = new SelectionSort<>();
             case 4 -> ordenador = new MergeSort<>();
+            case 5 -> ordenador = new HeapSort<>();
+            case 6 -> ordenador = new QuickSort<>();
 
         }
 
