@@ -107,8 +107,9 @@ public class AppOficina {
 
     static int exibirMenuComparadores() {
         cabecalho();
-        System.out.println("1 - Padrão");
+        System.out.println("1 - Por descrição");
         System.out.println("2 - Por código");
+        System.out.println("3 - Por valor de venda");
         
         return lerNumero("Digite sua opção", Integer.class);
     }
@@ -260,6 +261,7 @@ public class AppOficina {
 
             case 1 -> criterio = new ComparadorPadrao();
             case 2 -> criterio = new ComparadorPorCodigo();
+            case 3 -> criterio = new ComparadorPorValor();
 
         }
 

@@ -105,7 +105,7 @@ public abstract class Produto implements Comparable<Produto> {
     public String toString(){
         NumberFormat moeda = NumberFormat.getCurrencyInstance();
         
-        return String.format("%04d - %s: %s", idProduto, descricao, moeda.format(valorDeVenda()));
+        return String.format("%04d - %-45s | %s", idProduto, descricao, moeda.format(valorDeVenda()));
     }
 
     @Override
