@@ -1,19 +1,11 @@
 import java.util.Comparator;
 
-public class ComparadorPorValor implements Comparator<Produto>{
+public class ComparadorPorValor implements Comparator<Pedido>{
 
-    @Override
-    public int compare(Produto o1, Produto o2) {
+	@Override
+	public int compare(Pedido o1, Pedido o2) {
+	
+		return Double.compare(o1.valorFinal(), o2.valorFinal());
 
-        /*
-        
-        O enunciado diz exatamente "comparador por porcentagem de desconto"...
-        Mas isso não faz sentido, pois o percentual de desconto não varia, o mais próximo e correto seria essa comparação por valor de venda, que inclui o desconto.
-        
-        */
-
-        return Double.compare(o1.valorDeVenda(), o2.valorDeVenda());
-    
-    }
-    
+	}
 }
